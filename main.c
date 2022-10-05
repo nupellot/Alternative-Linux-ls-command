@@ -10,27 +10,44 @@
 
 
 int main(void) {
+	void PrintFilenames(char** filenames, int AmountOfObjects);
 	int length(char* string);
+	void SortFilenames(char** filenames, int AmountOfObjects);
 	
-	DIR* directory = opendir("hui");
+	DIR* directory = opendir("Test catalog");
 	if (directory == NULL) {
 		printf("Error opening directory\n");
 		exit(1);
 	}
 
 	// allocating space for array of strings.
-	char** filenames = calloc(0, sizeof(char*));
-	struct dirent* info;
-	int AmountOfObjects = 0;
+	char** filenames = calloc(0, sizeof(char*)); 
+	struct dirent* info;  // struct containing information about file or subcatalog.
+	int AmountOfObjects = 0;  // amount of files and subcatalogs.
+	// Getting all the filesnames.
 	while ((info = readdir(directory)) != NULL) {
 		AmountOfObjects++;
 		filenames = realloc(filenames, AmountOfObjects * sizeof(char*));
 		filenames[AmountOfObjects - 1] = calloc(length(info->d_name), sizeof(char));
 		filenames[AmountOfObjects - 1] = info->d_name;
-		printf("%s\n", info->d_name);
+		// printf("%s\n", info->d_name);
 	}
 
-	
+
+	SortFilenames(filenames, AmountOfObjects);
+	PrintFilenames(filenames, AmountOfObjects);
+
+
+	// Releasing dynamically allocated memory.
+	// closedir(directory);
+	// for (int i = 0; i < AmountOfObjects; i++) {
+	// 	free(filenames[i]);
+	// }
+	// free(filenames);
+}
+
+
+void SortFilenames(char** filenames, int AmountOfObjects) {
 	int AmountOfSwaps;
 	do {
 		AmountOfSwaps = 0;
@@ -52,19 +69,21 @@ int main(void) {
 			}
 		}
 	} while (AmountOfSwaps != 0);
-	// printf("%d", (int)'a');
-	
-	// for (int i = 0; i < AmountOfObjects; i++) {
-	// 	printf("%s\n", filenames[i]);
-	// }
-	printf("Введите число колонок\n");
+}
+
+
+void PrintFilenames(char** filenames, int AmountOfObjects) {
+	// Getting required amount of collumns.
+	printf("\033[32mInput amount of collumns\033[0m\n");
 	int AmountOfCollumns = 1;
 	scanf("%d", &AmountOfCollumns);
-	if (AmountOfCollumns > AmountOfObjects) {
+	// Checking number of collumns for correctness.
+	if (AmountOfCollumns > AmountOfObjects || AmountOfCollumns < 1) {
 		AmountOfCollumns = AmountOfObjects;
 	}
 
-	
+	printf("\n");
+	// Printing filenames.
 	for (int i = 0; i < AmountOfObjects;) {
 		for (int j = 0; j < AmountOfCollumns && i < AmountOfObjects; j++, i++) {
 			printf("%-10s", filenames[i]);
@@ -72,10 +91,11 @@ int main(void) {
 		printf("\n");
 	}
 
-	
-	closedir(directory);
+	printf("\033[34mTotal amount of objects: \033[35m%d\033[0m", AmountOfObjects);
 }
 
+
+// Returns length of a string.
 int length(char* string) {
 	int length = 0;
 	for (int i = 0; string[i] != '\0'; i++) {
