@@ -54,10 +54,25 @@ int main(void) {
 	} while (AmountOfSwaps != 0);
 	// printf("%d", (int)'a');
 	
-	for (int i = 0; i < AmountOfObjects; i++) {
-		printf("%s\n", filenames[i]);
+	// for (int i = 0; i < AmountOfObjects; i++) {
+	// 	printf("%s\n", filenames[i]);
+	// }
+	printf("Введите число колонок\n");
+	int AmountOfCollumns = 1;
+	scanf("%d", &AmountOfCollumns);
+	if (AmountOfCollumns > AmountOfObjects) {
+		AmountOfCollumns = AmountOfObjects;
 	}
 
+	
+	for (int i = 0; i < AmountOfObjects;) {
+		for (int j = 0; j < AmountOfCollumns && i < AmountOfObjects; j++, i++) {
+			printf("%-10s", filenames[i]);
+		}
+		printf("\n");
+	}
+
+	
 	closedir(directory);
 }
 
