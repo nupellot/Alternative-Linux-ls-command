@@ -17,7 +17,7 @@ int main(void) {
 	DIR* directory = opendir("Test catalog");
 	if (directory == NULL) {
 		printf("Error opening directory\n");
-		exit(1);
+		exit(1); 
 	}
 
 	// allocating space for array of strings.
